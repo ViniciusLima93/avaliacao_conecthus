@@ -1,0 +1,51 @@
+name: conecthus
+
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: conecthus-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: conecthus
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d conecthus']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: ./backend
+    container_name: conecthus-api
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/conecthus?schema=public
+      # Frontend no Docker (8080) e dev server do Vite (5173).
+      CORS_ORIGIN: http://localhost:8080,http://localhost:5173
+    ports:
+      - '3000:3000'
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build:
+      context: ./frontend
+      args:
+        # Endereço da API visto pelo navegador (não pelo container).
+        VITE_API_URL: http://localhost:3000
+    container_name: conecthus-web
+    ports:
+      - '8080:80'
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
+    # Nome fixo: mantém os dados criados quando o compose ficava em backend/.
+    name: backend_pgdata
