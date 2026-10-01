@@ -61,7 +61,7 @@ Para inspecionar os dados com DBeaver, pgAdmin ou outro cliente:
 
 Os dados ficam em `public.users`. A senha é salva apenas como hash bcrypt, e usuários excluídos continuam na tabela com `deleted_at` preenchido (soft delete).
 
-![Tabela users no DBeaver](imagens-app/db.jpg)
+![Tabela users no DBeaver](imagens-app/db2.jpg)
 
 ## Testes
 
