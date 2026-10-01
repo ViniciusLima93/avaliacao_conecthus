@@ -11,7 +11,6 @@ type UserBody = {
   name: string;
   email: string;
   registration: string;
-  isActive: boolean;
   password?: string;
 };
 
@@ -62,7 +61,6 @@ describe('Users (e2e)', () => {
     expect(user).toMatchObject({
       name: payload.name,
       email: payload.email,
-      isActive: true,
     });
     expect(user.password).toBeUndefined();
 
@@ -77,11 +75,10 @@ describe('Users (e2e)', () => {
 
     const updated = await request(app.getHttpServer())
       .patch(`/users/${user.id}`)
-      .send({ name: 'Maria Souza', isActive: false })
+      .send({ name: 'Maria Souza' })
       .expect(200);
     expect(updated.body).toMatchObject({
       name: 'Maria Souza',
-      isActive: false,
     });
 
     await request(app.getHttpServer()).delete(`/users/${user.id}`).expect(204);

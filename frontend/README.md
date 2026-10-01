@@ -11,6 +11,7 @@ Interface web de gerenciamento de usuários do **WenLock**, construída com **Re
 - [Responsividade](#responsividade)
 - [Arquitetura](#arquitetura)
 - [Componentes](#componentes)
+- [Testes](#testes)
 - [Scripts](#scripts)
 - [Observações](#observações)
 
@@ -159,15 +160,35 @@ src/
 
 **Acessibilidade:** rótulos em todos os campos e botões de ícone, `aria-invalid` e mensagens de erro associadas aos campos, diálogos com `role`/`aria-modal`, fechamento com Esc, foco devolvido ao elemento de origem e suporte a `prefers-reduced-motion`.
 
+## Testes
+
+Testes com **Vitest** + **Testing Library** (ambiente jsdom), escritos do ponto de vista do usuário: os campos são encontrados pelo rótulo e os botões pelo nome acessível.
+
+```bash
+npm test             # roda uma vez
+npm run test:watch   # modo observação
+```
+
+| Arquivo                                                                       | O que cobre                                                                                                    |
+| ----------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| [`userFormSchema.test.ts`](src/pages/Users/components/userFormSchema.test.ts) | Regras do schema Zod de cadastro e edição: nome, matrícula, e-mail, senha e confirmação                        |
+| [`UserForm.test.tsx`](src/pages/Users/components/UserForm.test.tsx)           | Botão habilitado só com o formulário válido, filtro de dígitos, limites, erros, envio e modo de edição         |
+| [`UsersPage.test.tsx`](src/pages/Users/UsersPage.test.tsx)                    | Estados vazio e de erro, listagem, pesquisa com debounce, paginação, visualizar, excluir (Sim/Não) e navegação |
+
+- A API é mockada com `vi.mock` no `users.service`, então os testes não precisam do backend.
+- [`src/test/render.tsx`](src/test/render.tsx) renderiza com os mesmos providers do app (tema, React Query, toasts e router em memória).
+
 ## Scripts
 
-| Script            | Descrição                     |
-| ----------------- | ----------------------------- |
-| `npm run dev`     | Servidor de desenvolvimento   |
-| `npm run build`   | Typecheck + build de produção |
-| `npm run preview` | Serve o build localmente      |
-| `npm run lint`    | ESLint                        |
-| `npm run format`  | Prettier                      |
+| Script               | Descrição                     |
+| -------------------- | ----------------------------- |
+| `npm run dev`        | Servidor de desenvolvimento   |
+| `npm run build`      | Typecheck + build de produção |
+| `npm run preview`    | Serve o build localmente      |
+| `npm test`           | Testes (Vitest)               |
+| `npm run test:watch` | Testes em modo observação     |
+| `npm run lint`       | ESLint                        |
+| `npm run format`     | Prettier                      |
 
 ## Observações
 

@@ -39,7 +39,6 @@ export class UserRepository implements UserRepositoryPort {
           registration: data.registration,
           email: data.email,
           password: data.password,
-          isActive: data.isActive,
           updatedAt: data.updatedAt,
         },
       }),

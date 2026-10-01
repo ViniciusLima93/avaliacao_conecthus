@@ -42,7 +42,7 @@ const Bar = styled.header`
   height: ${({ theme }) => theme.layout.headerHeight};
   padding: 0 16px;
   background: ${({ theme }) => theme.colors.surface};
-  box-shadow: 0 2px 4px rgba(12, 26, 51, 0.06);
+  box-shadow: ${({ theme }) => theme.shadows.header};
 
   ${media.lg} {
     justify-content: flex-end;

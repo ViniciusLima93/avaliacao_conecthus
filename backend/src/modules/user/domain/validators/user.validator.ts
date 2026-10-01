@@ -43,9 +43,6 @@ const userSchema = Joi.object({
     'any.required': UserMessages.PASSWORD_REQUIRED,
     'string.empty': UserMessages.PASSWORD_REQUIRED,
   }),
-  isActive: Joi.boolean().required().messages({
-    'boolean.base': UserMessages.IS_ACTIVE_BOOLEAN,
-  }),
 });
 
 export class UserValidator implements ValidatorInterface<UserEntity> {
@@ -56,7 +53,6 @@ export class UserValidator implements ValidatorInterface<UserEntity> {
         registration: entity.registration,
         email: entity.email,
         password: entity.password,
-        isActive: entity.isActive,
       },
       { abortEarly: false },
     );

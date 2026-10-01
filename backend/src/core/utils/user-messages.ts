@@ -19,5 +19,4 @@ export const UserMessages = {
   PASSWORD_STRING: 'Senha deve ser um texto',
   PASSWORD_LENGTH: 'Senha deve ter exatamente 6 caracteres',
   PASSWORD_ALPHANUMERIC: 'Senha deve conter apenas letras e números',
-  IS_ACTIVE_BOOLEAN: 'isActive deve ser verdadeiro ou falso',
 } as const;

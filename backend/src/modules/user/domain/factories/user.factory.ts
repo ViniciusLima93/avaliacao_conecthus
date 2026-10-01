@@ -7,7 +7,6 @@ export type CreateUserFactoryInput = {
   registration: string;
   email: string;
   hashedPassword: string;
-  isActive?: boolean;
 };
 
 export class UserFactory {
@@ -19,7 +18,6 @@ export class UserFactory {
       registration: input.registration,
       email: Email.create(input.email),
       password: input.hashedPassword,
-      isActive: input.isActive ?? true,
       createdAt: now,
       updatedAt: now,
       deletedAt: null,

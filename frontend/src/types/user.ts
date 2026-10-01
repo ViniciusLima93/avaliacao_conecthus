@@ -3,7 +3,6 @@ export type User = {
   name: string;
   registration: string;
   email: string;
-  isActive: boolean;
   createdAt: string;
   updatedAt: string;
 };
@@ -13,7 +12,6 @@ export type CreateUserInput = {
   registration: string;
   email: string;
   password: string;
-  isActive?: boolean;
 };
 
 export type UpdateUserInput = Partial<CreateUserInput>;

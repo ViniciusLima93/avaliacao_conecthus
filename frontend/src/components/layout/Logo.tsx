@@ -30,7 +30,7 @@ const Wordmark = styled.span`
 `;
 
 const Accent = styled.span`
-  color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.accent};
 `;
 
 const Dot = styled.span`
@@ -38,7 +38,7 @@ const Dot = styled.span`
   height: 0.26em;
   margin-left: 0.12em;
   border-radius: 50%;
-  background: ${({ theme }) => theme.colors.primary};
+  background: ${({ theme }) => theme.colors.accent};
 `;
 
 /* "WL" com o ponto abaixo do L, como no menu recolhido do protótipo. */
@@ -60,5 +60,5 @@ const CompactDot = styled.span`
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: ${({ theme }) => theme.colors.primary};
+  background: ${({ theme }) => theme.colors.accent};
 `;

@@ -73,7 +73,7 @@ export function UserForm({
               return registrationField.onChange(event);
             }}
             label="Insira o Nº da matrícula"
-            helper={`• Mín. ${USER_LIMITS.registrationMin} Letras | • Máx. ${USER_LIMITS.registrationMax} Caracteres`}
+            helper={`• Mín. ${USER_LIMITS.registrationMin} | • Máx. ${USER_LIMITS.registrationMax} Números`}
             error={errors.registration?.message}
             maxLength={USER_LIMITS.registrationMax}
             inputMode="numeric"

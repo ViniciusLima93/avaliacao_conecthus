@@ -1,4 +1,4 @@
-import { Check, CircleAlert, X } from 'lucide-react';
+import { Check, CircleAlert, TriangleAlert, X } from 'lucide-react';
 import {
   createContext,
   type ReactNode,
@@ -10,7 +10,7 @@ import {
 import styled, { keyframes } from 'styled-components';
 import { media } from '../../styles/theme';
 
-type ToastType = 'success' | 'error';
+type ToastType = 'success' | 'warning' | 'error';
 
 type ToastItem = {
   id: number;
@@ -20,6 +20,8 @@ type ToastItem = {
 
 type ToastContextValue = {
   success: (message: string) => void;
+  /** Aviso (laranja), ex.: "Cadastro cancelado". */
+  warning: (message: string) => void;
   error: (message: string) => void;
 };
 
@@ -46,6 +48,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const value = useMemo(
     () => ({
       success: (message: string) => show('success', message),
+      warning: (message: string) => show('warning', message),
       error: (message: string) => show('error', message),
     }),
     [show],
@@ -57,11 +60,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       <Region aria-live="polite" aria-atomic="false">
         {toasts.map((toast) => (
           <Item key={toast.id} $type={toast.type} role="status">
-            {toast.type === 'success' ? (
-              <Check size={24} strokeWidth={3} aria-hidden="true" />
-            ) : (
-              <CircleAlert size={24} strokeWidth={2.5} aria-hidden="true" />
-            )}
+            <ToastIcon type={toast.type} />
             <span>{toast.message}</span>
             <Dismiss
               type="button"
@@ -77,6 +76,23 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   );
 }
 
+function ToastIcon({ type }: { type: ToastType }) {
+  if (type === 'success') {
+    return <Check size={24} strokeWidth={3} aria-hidden="true" />;
+  }
+  if (type === 'warning') {
+    return <TriangleAlert size={24} strokeWidth={2.5} aria-hidden="true" />;
+  }
+  return <CircleAlert size={24} strokeWidth={2.5} aria-hidden="true" />;
+}
+
+/** Spec: sucesso #00C857, aviso #FF7700. */
+const backgrounds = {
+  success: 'snackbarSuccess',
+  warning: 'snackbarWarning',
+  error: 'danger',
+} as const;
+
 // eslint-disable-next-line react-refresh/only-export-components
 export function useToast(): ToastContextValue {
   const context = useContext(ToastContext);
@@ -87,8 +103,8 @@ export function useToast(): ToastContextValue {
 }
 
 const slideIn = keyframes`
-  from { transform: translateY(-12px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
 `;
 
 /**
@@ -97,23 +113,19 @@ const slideIn = keyframes`
  */
 const Region = styled.div`
   position: fixed;
-  top: calc(${({ theme }) => theme.layout.headerHeight} + 12px);
+  top: calc(${({ theme }) => theme.layout.headerHeight} + 8px);
   left: 16px;
-  right: 16px;
+  right: 0;
   z-index: ${({ theme }) => theme.zIndex.toast};
   display: flex;
   flex-direction: column;
   gap: 8px;
   pointer-events: none;
 
+  /* Spec: 329px, colado à borda direita da tela. */
   ${media.md} {
     left: auto;
-    right: 24px;
-    width: 360px;
-  }
-
-  ${media.lg} {
-    right: 32px;
+    width: 329px;
   }
 `;
 
@@ -122,15 +134,17 @@ const Item = styled.div<{ $type: ToastType }>`
   display: flex;
   align-items: center;
   gap: 12px;
-  min-height: 52px;
-  padding: 10px 12px 10px 16px;
-  border-radius: ${({ theme }) => theme.radii.md};
-  background: ${({ theme, $type }) =>
-    $type === 'success' ? theme.colors.snackbarSuccess : theme.colors.danger};
+  min-height: 48px;
+  padding: 8px 12px 8px 16px;
+  /* Spec: #00C857, só os cantos da esquerda arredondados (6px). */
+  border-radius: ${({ theme }) => theme.radii.md} 0 0
+    ${({ theme }) => theme.radii.md};
+  background: ${({ theme, $type }) => theme.colors[backgrounds[$type]]};
   color: ${({ theme }) => theme.colors.white};
   box-shadow: ${({ theme }) => theme.shadows.md};
+  /* Spec: Manrope Bold 16px. */
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   pointer-events: auto;
   animation: ${slideIn} 0.2s ease;
 

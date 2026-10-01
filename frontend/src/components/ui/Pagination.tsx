@@ -5,7 +5,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { useId } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { media } from '../../styles/theme';
 
 type PaginationProps = {
@@ -18,14 +18,10 @@ type PaginationProps = {
   onLimitChange: (limit: number) => void;
 };
 
-/** Janela de páginas visíveis centrada na atual (ex.: 3 4 [5] 6 7). */
-function visiblePages(page: number, totalPages: number, size = 5): number[] {
-  const half = Math.floor(size / 2);
-  const start = Math.max(1, Math.min(page - half, totalPages - size + 1));
-  const end = Math.min(totalPages, start + size - 1);
-  return Array.from({ length: end - start + 1 }, (_, i) => start + i);
-}
-
+/**
+ * Paginação do protótipo: "Itens por página 15  |<  <  [1]  >  >|  de 10".
+ * Mostra só a página atual, em destaque, entre os botões de navegação.
+ */
 export function Pagination({
   page,
   totalPages,
@@ -39,6 +35,8 @@ export function Pagination({
   const lastPage = Math.max(totalPages, 1);
   const isFirst = page <= 1;
   const isLast = page >= lastPage;
+  // Garante que o valor atual (ex.: vindo da URL) apareça entre as opções.
+  const sizes = [...new Set([...pageSizeOptions, limit])].sort((a, b) => a - b);
 
   return (
     <Wrapper aria-label="Paginação">
@@ -54,7 +52,7 @@ export function Pagination({
             value={limit}
             onChange={(event) => onLimitChange(Number(event.target.value))}
           >
-            {pageSizeOptions.map((option) => (
+            {sizes.map((option) => (
               <option key={option} value={option}>
                 {option}
               </option>
@@ -68,41 +66,33 @@ export function Pagination({
             disabled={isFirst}
             onClick={() => onPageChange(1)}
           >
-            <ChevronFirst size={16} />
+            <ChevronFirst size={20} />
           </NavButton>
           <NavButton
             aria-label="Página anterior"
             disabled={isFirst}
             onClick={() => onPageChange(page - 1)}
           >
-            <ChevronLeft size={16} />
+            <ChevronLeft size={20} />
           </NavButton>
 
-          {visiblePages(page, lastPage).map((number) => (
-            <PageButton
-              key={number}
-              $active={number === page}
-              aria-current={number === page ? 'page' : undefined}
-              aria-label={`Página ${number}`}
-              onClick={() => onPageChange(number)}
-            >
-              {number}
-            </PageButton>
-          ))}
+          <CurrentPage aria-current="page" aria-label={`Página ${page}`}>
+            {page}
+          </CurrentPage>
 
           <NavButton
             aria-label="Próxima página"
             disabled={isLast}
             onClick={() => onPageChange(page + 1)}
           >
-            <ChevronRight size={16} />
+            <ChevronRight size={20} />
           </NavButton>
           <NavButton
             aria-label="Última página"
             disabled={isLast}
             onClick={() => onPageChange(lastPage)}
           >
-            <ChevronLast size={16} />
+            <ChevronLast size={20} />
           </NavButton>
           <OfTotal>de {lastPage}</OfTotal>
         </Pages>
@@ -116,7 +106,10 @@ const Wrapper = styled.nav`
   flex-direction: column;
   gap: 12px;
   padding-top: 16px;
-  font-size: 12px;
+  /* Spec: Manrope Medium 14px/19px, #0B2B25. */
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 19px;
   color: ${({ theme }) => theme.colors.heading};
 
   ${media.md} {
@@ -138,54 +131,60 @@ const Controls = styled.div`
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 12px 24px;
 
   ${media.md} {
     justify-content: flex-end;
-    gap: 24px;
+    gap: 32px;
   }
 `;
 
+/* O "15" aparece como texto em negrito, mas continua sendo um select nativo. */
 const PageSize = styled.label`
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 
   select {
-    min-height: 32px;
-    padding: 0 6px;
-    border: 1px solid ${({ theme }) => theme.colors.border};
+    appearance: none;
+    padding: 2px 4px;
+    border: 0;
     border-radius: ${({ theme }) => theme.radii.sm};
-    background: ${({ theme }) => theme.colors.surface};
+    background: transparent;
     font-weight: 700;
+    color: ${({ theme }) => theme.colors.heading};
+    cursor: pointer;
+
+    &:hover {
+      background: rgba(11, 43, 37, 0.06);
+    }
   }
 `;
 
 const Pages = styled.div`
   display: flex;
   align-items: center;
-  gap: 4px;
-`;
+  gap: 8px;
 
-const baseButton = css`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 32px;
-  height: 32px;
-  padding: 0 6px;
-  border: 0;
-  border-radius: ${({ theme }) => theme.radii.md};
-  background: transparent;
-  color: ${({ theme }) => theme.colors.heading};
-  font-weight: 600;
+  ${media.sm} {
+    gap: 12px;
+  }
 `;
 
 const NavButton = styled.button.attrs({ type: 'button' })`
-  ${baseButton}
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: ${({ theme }) => theme.radii.card};
+  background: transparent;
+  color: ${({ theme }) => theme.colors.heading};
 
   &:hover:not(:disabled) {
-    background: ${({ theme }) => theme.colors.border};
+    background: rgba(11, 43, 37, 0.06);
   }
 
   &:disabled {
@@ -194,34 +193,23 @@ const NavButton = styled.button.attrs({ type: 'button' })`
   }
 `;
 
-const PageButton = styled.button.attrs({ type: 'button' })<{
-  $active: boolean;
-}>`
-  ${baseButton}
-
-  /* No mobile, mostra apenas a página atual para caber na tela. */
-  display: ${({ $active }) => ($active ? 'inline-flex' : 'none')};
-
-  ${media.sm} {
-    display: inline-flex;
-  }
-
-  ${({ $active, theme }) =>
-    $active
-      ? css`
-          min-width: 36px;
-          height: 36px;
-          background: ${theme.colors.primaryDark};
-          color: ${theme.colors.white};
-        `
-      : css`
-          &:hover {
-            background: ${theme.colors.border};
-          }
-        `}
+/* Spec: quadrado #0290A4, raio de 5px, número em Satoshi Bold 14px branco. */
+const CurrentPage = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 40px;
+  padding: 0 8px;
+  border-radius: ${({ theme }) => theme.radii.card};
+  background: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.white};
+  font-family: ${({ theme }) => theme.fonts.accent};
+  font-size: 14px;
+  font-weight: 700;
 `;
 
 const OfTotal = styled.span`
-  margin-left: 4px;
   font-weight: 700;
+  white-space: nowrap;
 `;

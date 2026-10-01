@@ -50,7 +50,6 @@ export class UpdateUserUseCase {
       name: input.name,
       registration,
       email,
-      isActive: input.isActive,
     });
 
     if (input.password !== undefined) {

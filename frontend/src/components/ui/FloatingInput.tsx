@@ -71,7 +71,9 @@ const Label = styled.label`
   left: 12px;
   right: 12px;
   overflow: hidden;
-  font-size: 14px;
+  /* Spec (vazio): Manrope Regular 18px, #0B2B25 a 90%. */
+  font-size: 18px;
+  line-height: 24px;
   color: ${({ theme }) => theme.colors.placeholder};
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -85,12 +87,14 @@ const Label = styled.label`
 
 const Input = styled.input`
   width: 100%;
-  height: 48px;
-  padding: 18px 12px 4px;
+  height: 56px;
+  padding: 22px 12px 6px;
   border: 0;
   background: transparent;
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.text};
+  /* Spec (valor): Manrope Regular 18px/24px. */
+  font-size: 18px;
+  line-height: 24px;
+  color: rgba(11, 43, 37, 0.9);
 
   &:focus,
   &:focus-visible {
@@ -98,8 +102,12 @@ const Input = styled.input`
   }
 
   &:focus + ${Label}, &:not(:placeholder-shown) + ${Label} {
+    /* Spec (preenchido): Manrope SemiBold 12px/17px, #0290A4. */
     top: 6px;
-    font-size: 11px;
+    font-size: 12px;
+    line-height: 17px;
+    font-weight: 600;
+    color: ${({ theme }) => theme.colors.primary};
     transform: none;
   }
 `;
@@ -108,7 +116,9 @@ const Control = styled.div<{ $invalid: boolean; $hasAdornment: boolean }>`
   position: relative;
   display: flex;
   align-items: center;
-  border-radius: ${({ theme }) => theme.radii.sm};
+  /* Spec: #F4F4F4 com só os cantos de cima arredondados. */
+  border-radius: ${({ theme }) => theme.radii.sm}
+    ${({ theme }) => theme.radii.sm} 0 0;
   background: ${({ theme }) => theme.colors.field};
   box-shadow: inset 0 -2px 0
     ${({ theme, $invalid }) => ($invalid ? theme.colors.danger : 'transparent')};
@@ -118,6 +128,13 @@ const Control = styled.div<{ $invalid: boolean; $hasAdornment: boolean }>`
 
   &:hover {
     background: ${({ theme }) => theme.colors.fieldHover};
+  }
+
+  /* Preenchido: sublinhado fino na cor primária. */
+  &:has(input:not(:placeholder-shown)) {
+    box-shadow: inset 0 -1px 0
+      ${({ theme, $invalid }) =>
+        $invalid ? theme.colors.danger : theme.colors.primary};
   }
 
   &:focus-within {
@@ -148,13 +165,15 @@ const Meta = styled.div`
   flex-wrap: wrap;
   align-items: flex-start;
   gap: 2px 12px;
+  /* Spec: Manrope Medium 10px/14px. */
   font-size: 10px;
-  line-height: 1.4;
+  font-weight: 500;
+  line-height: 14px;
 `;
 
 const ErrorText = styled.p`
   flex: 1 1 auto;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.danger};
 `;

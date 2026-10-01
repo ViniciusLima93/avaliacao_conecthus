@@ -23,9 +23,6 @@ export class UserResponseDto {
   })
   email: string;
 
-  @ApiProperty({ description: 'Usuário ativo', example: true })
-  isActive: boolean;
-
   @ApiProperty({
     description: 'Data de criação',
     example: '2026-09-30T00:26:19.500Z',
@@ -44,7 +41,6 @@ export class UserResponseDto {
       name: user.name,
       registration: user.registration,
       email: user.email,
-      isActive: user.isActive,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     };

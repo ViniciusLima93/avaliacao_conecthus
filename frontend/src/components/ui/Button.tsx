@@ -25,17 +25,19 @@ const variants = {
       opacity: 1;
     }
   `,
+  /* Spec ("Cancelar", "Não"): transparente, borda e texto #0B2B25. */
   secondary: css`
-    background: ${({ theme }) => theme.colors.surface};
-    color: ${({ theme }) => theme.colors.navy};
-    border-color: ${({ theme }) => theme.colors.navy};
+    background: transparent;
+    color: ${({ theme }) => theme.colors.heading};
+    border-color: ${({ theme }) => theme.colors.heading};
 
     &:hover:not(:disabled) {
-      background: ${({ theme }) => theme.colors.surfaceHover};
-      border-color: ${({ theme }) => theme.colors.primary};
+      background: rgba(11, 43, 37, 0.05);
     }
   `,
+  /* Spec ("Sim"): #0290A4 com Satoshi Bold. */
   confirm: css`
+    font-family: ${({ theme }) => theme.fonts.accent};
     background: ${({ theme }) => theme.colors.confirm};
     color: ${({ theme }) => theme.colors.white};
     border-color: ${({ theme }) => theme.colors.confirm};
@@ -73,13 +75,15 @@ export const Button = styled.button.attrs<ButtonProps>(({ type }) => ({
   align-items: center;
   justify-content: center;
   gap: 8px;
-  min-height: 44px;
-  padding: 0 18px;
+  min-height: 48px;
+  padding: 0 20px;
   width: ${({ $fullWidth }) => ($fullWidth ? '100%' : 'auto')};
   border: 1px solid transparent;
-  border-radius: ${({ theme }) => theme.radii.md};
-  font-size: 15px;
+  /* Spec: Manrope Bold 18px/24px, raio de 8px. */
+  border-radius: ${({ theme }) => theme.radii.lg};
+  font-size: 18px;
   font-weight: 700;
+  line-height: 24px;
   white-space: nowrap;
   transition:
     background 0.15s ease,

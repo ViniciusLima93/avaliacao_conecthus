@@ -41,7 +41,7 @@ export const ApiCreateUser = () =>
     ApiOperation({
       summary: 'Cria um usuário',
       description:
-        'Cadastra um novo usuário. A senha é criptografada antes de ser salva e o usuário é criado **ativo** quando `isActive` não é informado.',
+        'Cadastra um novo usuário. A senha é criptografada antes de ser salva.',
     }),
     ApiBody({ type: CreateUserDto }),
     ApiCreatedResponse({
@@ -88,7 +88,6 @@ export const ApiUpdateUser = () =>
       type: UpdateUserDto,
       examples: {
         nome: { summary: 'Alterar nome', value: { name: 'Maria Souza' } },
-        desativar: { summary: 'Desativar usuário', value: { isActive: false } },
         senha: {
           summary: 'Trocar senha',
           value: { password: 'Xyz789' },

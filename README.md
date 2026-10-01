@@ -6,7 +6,8 @@ Sistema **CRUD de gerenciamento de usuários**, com backend em **NestJS + Prisma
 desafio_conecthus/
 ├── docker-compose.yaml   # sobe banco, API e frontend com um comando
 ├── backend/              # API REST — NestJS, Prisma, PostgreSQL, Swagger
-└── frontend/             # Interface web — React, Vite, styled-components
+├── frontend/             # Interface web — React, Vite, styled-components
+└── imagens-app/          # capturas usadas neste README
 ```
 
 ## Início rápido
@@ -40,7 +41,15 @@ docker compose down               # parar tudo (os dados do banco são mantidos)
 
 > ⚠️ `docker compose down -v` também apaga o volume do banco, **removendo todos os dados**.
 
-### Acessar o banco (DBeaver, pgAdmin etc.)
+## Documentação da API (Swagger)
+
+Com a API rodando, acesse **http://localhost:3000/swagger**. Lá estão todos os endpoints, com exemplos de requisição e resposta, os códigos de erro e o botão "Try it out" para testar direto pelo navegador. O OpenAPI também está disponível em `/swagger-json` e `/swagger-yaml`.
+
+![Documentação da API no Swagger](imagens-app/docs.jpg)
+
+## Banco de dados
+
+Para inspecionar os dados com DBeaver, pgAdmin ou outro cliente:
 
 | Campo   | Valor       |
 | ------- | ----------- |
@@ -50,56 +59,42 @@ docker compose down               # parar tudo (os dados do banco são mantidos)
 | Usuário | `postgres`  |
 | Senha   | `postgres`  |
 
-Os dados ficam em `public.users`. Usuários excluídos continuam na tabela com `deleted_at` preenchido (soft delete).
+Os dados ficam em `public.users`. A senha é salva apenas como hash bcrypt, e usuários excluídos continuam na tabela com `deleted_at` preenchido (soft delete).
 
-## Stack
+![Tabela users no DBeaver](imagens-app/db.jpg)
 
-| Camada   | Tecnologias                                                                                                                  |
-| -------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| Backend  | NestJS 11, TypeScript, Prisma 7, class-validator, Joi, bcrypt, Swagger, Jest, Supertest                                      |
-| Banco    | PostgreSQL 17                                                                                                                |
-| Frontend | React 19, Vite, TypeScript, styled-components, React Router, TanStack Query, React Hook Form, Zod, Material UI (Breadcrumbs) |
-| Infra    | Docker, Docker Compose, nginx                                                                                                |
+## Testes
 
-## Requisitos do desafio
+### Backend
+
+Os testes unitários não precisam de banco. Os e2e sobem a aplicação inteira contra um PostgreSQL real, usando um banco separado (`conecthus_test`, definido em `backend/.env.test`). As migrations desse banco são aplicadas automaticamente antes dos testes.
+
+```bash
+cd backend
+npm install
+
+# unitários: entidade, validações e casos de uso
+npm test
+
+# e2e: precisam do PostgreSQL rodando
+docker compose -f ../docker-compose.yaml up -d db
+npm run test:e2e
+
+# cobertura dos unitários
+npm run test:cov
+```
 
 ### Frontend
 
-| Requisito                                                 | Status |
-| --------------------------------------------------------- | :----: |
-| Framework de front-end (React)                            |   ✅   |
-| Interface de usuário e validações                         |   ✅   |
-| Tela de Apresentação (Home)                               |   ✅   |
-| Lista de usuários com pesquisa por nome                   |   ✅   |
-| Lista de usuários com paginação                           |   ✅   |
-| Cadastro — Nome: apenas letras                            |   ✅   |
-| Cadastro — E-mail: apenas e-mails válidos                 |   ✅   |
-| Cadastro — Matrícula: apenas números                      |   ✅   |
-| Cadastro — Senha: alfanumérica de 6 dígitos               |   ✅   |
-| Botão de salvar habilitado só com todos os campos válidos |   ✅   |
-| Todos os campos obrigatórios                              |   ✅   |
-| Edição de usuário                                         |   ✅   |
-| Exclusão de usuário                                       |   ✅   |
+Testes com Vitest + Testing Library para o schema Zod, o formulário e a listagem. A API é mockada, então não é preciso subir o backend.
 
-### Backend e banco de dados
+```bash
+cd frontend
+npm install
 
-| Requisito                          | Status |
-| ---------------------------------- | :----: |
-| Endpoints de CRUD de usuários      |   ✅   |
-| API RESTful com NestJS             |   ✅   |
-| Documentação com Swagger UI        |   ✅   |
-| Banco relacional (PostgreSQL)      |   ✅   |
-| Tabelas para os dados dos usuários |   ✅   |
-
-### Além do escopo
-
-- **Arquitetura em camadas** no backend (domain / application / infrastructure), com casos de uso, entidade rica, value object e repositório como porta.
-- **Soft delete** com filtro global via extensão do Prisma: usuários excluídos nunca aparecem nas consultas.
-- **Validação em duas pontas**, com as mesmas regras no frontend (Zod) e no backend (DTO + validador de domínio).
-- **Testes automatizados**: unitários (domínio e casos de uso) e e2e contra um banco PostgreSQL real.
-- **Layout responsivo (mobile first)**, menu lateral recolhível, notificações (snackbar), drawer de visualização e menu de perfil.
-- **Pesquisa** por nome, e-mail ou matrícula, com o estado da listagem preservado na URL.
-- **Docker Compose** que sobe o sistema completo com um comando.
+npm test             # roda uma vez
+npm run test:watch   # modo observação
+```
 
 ## Desenvolvimento
 

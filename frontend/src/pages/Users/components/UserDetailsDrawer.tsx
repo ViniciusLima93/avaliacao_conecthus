@@ -80,7 +80,6 @@ const Section = styled.section`
 const SectionTitle = styled.h3`
   ${sectionTitle}
   margin-bottom: 20px;
-  font-size: 11px;
 `;
 
 const Fields = styled.dl`

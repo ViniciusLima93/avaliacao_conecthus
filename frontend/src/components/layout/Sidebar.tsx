@@ -156,6 +156,7 @@ const Aside = styled.aside<{ $collapsed: boolean; $mobileOpen: boolean }>`
   width: min(${({ theme }) => theme.layout.sidebarWidth}, 85vw);
   padding: 24px 12px 20px;
   background: ${({ theme }) => theme.colors.navy};
+  box-shadow: ${({ theme }) => theme.shadows.sidebar};
   color: ${({ theme }) => theme.colors.white};
   transform: translateX(${({ $mobileOpen }) => ($mobileOpen ? '0' : '-100%')});
   transition:
@@ -252,10 +253,12 @@ const itemBase = css<{ $collapsed: boolean }>`
   gap: 12px;
   min-height: 44px;
   padding: 0 14px;
-  border-radius: ${({ theme }) => theme.radii.md};
-  color: ${({ theme }) => theme.colors.white};
-  font-size: 14px;
+  border-radius: ${({ theme }) => theme.radii.sm};
+  /* Spec: Manrope Medium 16px, branco a 90%. */
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 16px;
   font-weight: 500;
+  line-height: 22px;
   transition: background 0.15s ease;
 
   &:hover {
@@ -277,19 +280,13 @@ const itemBase = css<{ $collapsed: boolean }>`
   }
 `;
 
-/* Item ativo: fundo verde-azulado; recolhido, o ícone fica escuro como no protótipo. */
+/* Item ativo (spec): fundo #00AAC1, texto e ícone verde-escuro com peso 800. */
 const activeItem = css<{ $collapsed: boolean }>`
   &.active {
-    background: ${({ theme }) => theme.colors.primary};
-    font-weight: 700;
-
-    ${media.lg} {
-      ${({ $collapsed, theme }) =>
-        $collapsed &&
-        css`
-          color: ${theme.colors.navy};
-        `}
-    }
+    background: ${({ theme }) => theme.colors.accent};
+    color: ${({ theme }) => theme.colors.heading};
+    font-weight: 800;
+    opacity: 1;
   }
 `;
 
@@ -304,6 +301,9 @@ const GroupButton = styled.button<{ $collapsed: boolean }>`
   border: 0;
   background: transparent;
   text-align: left;
+  /* Spec: título do grupo em Bold, branco a 60%. */
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 700;
 
   ${media.lg} {
     display: ${({ $collapsed }) => ($collapsed ? 'none' : 'flex')};
@@ -351,7 +351,6 @@ const SubLink = styled(NavLink)<{ $collapsed: boolean }>`
   ${itemBase}
   ${activeItem}
   min-height: 36px;
-  font-size: 13px;
 `;
 
 const Footer = styled.footer<{ $collapsed: boolean }>`
@@ -360,8 +359,8 @@ const Footer = styled.footer<{ $collapsed: boolean }>`
   padding: 16px 8px 0;
 
   small {
-    font-size: 10px;
-    opacity: 0.75;
+    font-size: 12px;
+    color: ${({ theme }) => theme.colors.footerText};
   }
 
   ${media.lg} {

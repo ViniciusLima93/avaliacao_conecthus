@@ -12,7 +12,9 @@ export const sectionTitle = css`
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 12px;
+  /* Spec: Manrope Bold 14px/19px. */
+  font-size: 14px;
+  line-height: 19px;
   font-weight: 700;
   color: ${({ theme }) => theme.colors.heading};
 

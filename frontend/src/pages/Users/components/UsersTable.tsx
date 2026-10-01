@@ -108,23 +108,26 @@ const Table = styled.table`
   border-collapse: separate;
   border-spacing: 0 8px;
   margin-top: -8px;
-  font-size: 13px;
+  /* Spec: Manrope Medium 16px/22px. */
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 22px;
 
   thead th {
-    padding: 10px 12px;
+    padding: 12px;
     background: ${({ theme }) => theme.colors.navy};
     color: ${({ theme }) => theme.colors.white};
     font-weight: 500;
     text-align: left;
 
     &:first-child {
-      border-radius: ${({ theme }) => theme.radii.sm} 0 0
-        ${({ theme }) => theme.radii.sm};
+      border-radius: ${({ theme }) => theme.radii.md} 0 0
+        ${({ theme }) => theme.radii.md};
     }
 
     &:last-child {
-      border-radius: 0 ${({ theme }) => theme.radii.sm}
-        ${({ theme }) => theme.radii.sm} 0;
+      border-radius: 0 ${({ theme }) => theme.radii.md}
+        ${({ theme }) => theme.radii.md} 0;
     }
   }
 
@@ -154,8 +157,6 @@ const Table = styled.table`
   }
 
   ${media.md} {
-    font-size: 14px;
-
     thead th,
     tbody td {
       padding-left: 16px;
@@ -167,7 +168,7 @@ const Table = styled.table`
 const NameCell = styled.td`
   width: 100%;
   word-break: break-word;
-  color: ${({ theme }) => theme.colors.text};
+  color: rgba(11, 43, 37, 0.9);
 `;
 
 const ActionsHeader = styled.th`

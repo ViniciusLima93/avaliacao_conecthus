@@ -95,13 +95,12 @@ curl -X POST http://localhost:3000/users \
   "name": "Maria Silva",
   "registration": "2024001",
   "email": "maria@email.com",
-  "isActive": true,
   "createdAt": "2026-09-30T00:26:19.500Z",
   "updatedAt": "2026-09-30T00:26:19.500Z"
 }
 ```
 
-A senha é armazenada com bcrypt e **nunca** é retornada. O campo `isActive` é opcional e o padrão é `true`.
+A senha é armazenada com bcrypt e **nunca** é retornada.
 
 ### Listar e pesquisar
 
@@ -144,7 +143,6 @@ As regras são aplicadas em duas camadas: no **DTO** (entrada HTTP, erro 400) e 
 | `registration` | Apenas números; 4 a 10 dígitos                                  |  ✅   |
 | `email`        | E-mail válido; até 40 caracteres; salvo em minúsculas           |  ✅   |
 | `password`     | Exatamente 6 caracteres alfanuméricos (letras e números)        |       |
-| `isActive`     | Booleano (opcional)                                             |       |
 
 Campos não previstos no corpo da requisição são rejeitados (`forbidNonWhitelisted`).
 
@@ -197,18 +195,18 @@ Tabela `users` (schema em [`schema.prisma`](src/core/config/database/prisma/sche
 | `registration` | `varchar(10)`  | not null, **unique**        |
 | `email`        | `varchar(40)`  | not null, **unique**        |
 | `password`     | `varchar(255)` | not null (hash bcrypt)      |
-| `is_active`    | `boolean`      | default `true`              |
 | `created_at`   | `timestamp`    | default `now()`             |
 | `updated_at`   | `timestamp`    | atualizado a cada alteração |
 | `deleted_at`   | `timestamp`    | nullable (soft delete)      |
 
 Migrations em [`src/core/config/database/prisma/migrations`](src/core/config/database/prisma/migrations):
 
-| Migration                          | Descrição                                      |
-| ---------------------------------- | ---------------------------------------------- |
-| `20260929000000_init`              | Cria a tabela `users`                          |
-| `20260930014139_user_field_limits` | Ajusta os tamanhos de nome, matrícula e e-mail |
-| `20260930024437_user_soft_delete`  | Adiciona `deleted_at`                          |
+| Migration                              | Descrição                                      |
+| -------------------------------------- | ---------------------------------------------- |
+| `20260929000000_init`                  | Cria a tabela `users`                          |
+| `20260930014139_user_field_limits`     | Ajusta os tamanhos de nome, matrícula e e-mail |
+| `20260930024437_user_soft_delete`      | Adiciona `deleted_at`                          |
+| `20260930230000_remove_user_is_active` | Remove a coluna `is_active`, que não era usada |
 
 ## Arquitetura
 

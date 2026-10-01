@@ -14,7 +14,6 @@ model User {
   registration String   @unique @db.VarChar(10)
   email        String   @unique @db.VarChar(40)
   password     String   @db.VarChar(255)
-  isActive     Boolean  @default(true) @map("is_active")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
   /// Soft delete: preenchido na exclusão. Registros com valor aqui nunca são retornados

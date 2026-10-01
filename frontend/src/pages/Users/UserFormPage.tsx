@@ -35,6 +35,12 @@ export function UserFormPage() {
 
   const backToList = () => navigate('/usuarios');
 
+  /** Spec: cancelar o cadastro avisa com o toast laranja e volta para a lista. */
+  const cancelCreate = () => {
+    toast.warning('Cadastro cancelado');
+    backToList();
+  };
+
   /** Conflitos (409) viram erro no campo; o resto vira notificação. */
   const handleError = (
     error: Error,
@@ -96,7 +102,7 @@ export function UserFormPage() {
           mode="create"
           defaultValues={emptyUserForm}
           submitting={createUser.isPending}
-          onCancel={backToList}
+          onCancel={cancelCreate}
           onSubmit={handleSubmit}
         />
       );

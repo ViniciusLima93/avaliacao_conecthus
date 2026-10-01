@@ -4,13 +4,6 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 const description = `
 API REST de gerenciamento de usuários do **Desafio Conecthus**.
 
-### Convenções
-- Identificadores são **UUID v4**.
-- Datas seguem **ISO 8601** (UTC).
-- A senha é armazenada com **bcrypt** e **nunca** é retornada.
-- O e-mail é normalizado para minúsculas; e-mail e matrícula são **únicos**.
-- Campos não documentados no corpo da requisição são **rejeitados** (400).
-
 ### Paginação
 Listagens aceitam \`page\` (padrão 1) e \`limit\` (padrão 10, máximo 100) e retornam:
 \`\`\`json

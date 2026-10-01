@@ -18,7 +18,7 @@ export const GlobalStyle = createGlobalStyle`
   body {
     min-height: 100dvh;
     font-family: ${({ theme }) => theme.fonts.body};
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.5;
     color: ${({ theme }) => theme.colors.text};
     background: ${({ theme }) => theme.colors.background};

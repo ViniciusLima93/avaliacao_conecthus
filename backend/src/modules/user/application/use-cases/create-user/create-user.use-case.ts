@@ -35,7 +35,6 @@ export class CreateUserUseCase {
       registration,
       email,
       hashedPassword: await this.hashService.hash(input.password),
-      isActive: input.isActive,
     });
 
     await this.userRepository.create(user);

@@ -31,8 +31,11 @@ function BreadcrumbTrail({ items }: { items: Crumb[] }) {
       aria-label="Trilha de navegação"
       separator={<ChevronRight size={12} aria-hidden="true" />}
       sx={{
-        fontSize: 11,
-        color: 'text.secondary',
+        // Spec: Manrope Medium 10px/14px, #0B2B25.
+        fontSize: 10,
+        fontWeight: 500,
+        lineHeight: '14px',
+        color: 'text.primary',
         '& .MuiBreadcrumbs-separator': { mx: 0.5 },
       }}
     >

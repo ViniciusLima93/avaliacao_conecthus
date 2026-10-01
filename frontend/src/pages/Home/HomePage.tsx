@@ -38,20 +38,31 @@ const Content = styled(Card)`
   flex-direction: column;
 `;
 
+/* Spec: Manrope Bold 32px/44px, #0D1931 (desktop). */
 const Greeting = styled.h2`
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 700;
-  color: ${({ theme }) => theme.colors.heading};
+  line-height: 1.375;
+  color: ${({ theme }) => theme.colors.navy};
 
   ${media.md} {
-    font-size: 22px;
+    font-size: 28px;
+  }
+
+  ${media.lg} {
+    font-size: 32px;
   }
 `;
 
+/* Spec: Manrope SemiBold 18px, #0D1931 (desktop). */
 const DateText = styled.p`
-  font-size: 13px;
-  font-weight: 500;
-  color: ${({ theme }) => theme.colors.heading};
+  font-size: 16px;
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.navy};
+
+  ${media.lg} {
+    font-size: 18px;
+  }
 `;
 
 const Hero = styled.div`
@@ -79,16 +90,23 @@ const IllustrationBox = styled.div`
 
 const WelcomeBox = styled.p`
   width: 100%;
-  max-width: 444px;
+  max-width: 520px;
   padding: 14px 16px;
-  border: 1px solid ${({ theme }) => theme.colors.navyLight};
-  border-radius: ${({ theme }) => theme.radii.md};
+  /* Spec: borda #272846, raio de 9px, sombra; texto Bold 28px/38px. */
+  border: 1px solid ${({ theme }) => theme.colors.outline};
+  border-radius: 9px;
+  box-shadow: ${({ theme }) => theme.shadows.md};
   text-align: center;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
+  line-height: 1.36;
   color: ${({ theme }) => theme.colors.heading};
 
   ${media.md} {
-    font-size: 20px;
+    font-size: 24px;
+  }
+
+  ${media.lg} {
+    font-size: 28px;
   }
 `;

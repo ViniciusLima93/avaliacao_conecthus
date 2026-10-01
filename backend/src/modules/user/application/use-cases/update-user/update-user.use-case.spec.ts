@@ -37,11 +37,9 @@ describe('UpdateUserUseCase', () => {
 
     const updated = await useCase.execute(user.id, {
       name: 'Nome Novo',
-      isActive: false,
     });
 
     expect(updated.name).toBe('Nome Novo');
-    expect(updated.isActive).toBe(false);
     expect(updated.email).toBe('a@email.com');
   });
 

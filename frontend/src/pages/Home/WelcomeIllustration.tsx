@@ -53,7 +53,7 @@ export function WelcomeIllustration() {
         stroke={colors.navy}
         strokeWidth="2.5"
       />
-      <circle cx="306" cy="78" r="28" fill={colors.primary} />
+      <circle cx="306" cy="78" r="28" fill={colors.accent} />
       <path
         d="M286 86 q7 -12 14 0 q7 12 14 0"
         fill="none"
@@ -67,7 +67,7 @@ export function WelcomeIllustration() {
         width="28"
         height="9"
         rx="3"
-        fill={colors.primary}
+        fill={colors.accent}
         stroke={colors.navy}
         strokeWidth="2"
       />
@@ -77,7 +77,7 @@ export function WelcomeIllustration() {
         width="24"
         height="9"
         rx="3"
-        fill={colors.primary}
+        fill={colors.accent}
         stroke={colors.navy}
         strokeWidth="2"
       />
@@ -96,7 +96,7 @@ export function WelcomeIllustration() {
         width="132"
         height="112"
         rx="16"
-        fill={colors.primary}
+        fill={colors.accent}
         stroke={colors.navy}
         strokeWidth="3"
       />
@@ -140,7 +140,7 @@ export function WelcomeIllustration() {
               width="18"
               height="18"
               rx="4"
-              fill={index < 2 ? colors.primary : colors.white}
+              fill={index < 2 ? colors.accent : colors.white}
               stroke={colors.navy}
               strokeWidth="2"
             />

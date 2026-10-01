@@ -9,7 +9,6 @@ export type UserProps = {
   registration: string;
   email: Email;
   password: string;
-  isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
   /** Soft delete: data da exclusão, ou `null` enquanto o usuário existe. */
@@ -17,7 +16,7 @@ export type UserProps = {
 };
 
 export type UpdateUserProps = Partial<
-  Pick<UserProps, 'name' | 'registration' | 'isActive'> & { email: string }
+  Pick<UserProps, 'name' | 'registration'> & { email: string }
 >;
 
 export class UserEntity {
@@ -61,10 +60,6 @@ export class UserEntity {
     return this.props.password;
   }
 
-  get isActive(): boolean {
-    return this.props.isActive;
-  }
-
   get createdAt(): Date {
     return this.props.createdAt;
   }
@@ -92,7 +87,6 @@ export class UserEntity {
     if (data.registration !== undefined)
       this.props.registration = data.registration.trim();
     if (data.email !== undefined) this.props.email = Email.create(data.email);
-    if (data.isActive !== undefined) this.props.isActive = data.isActive;
     this.touch();
     this.validate();
   }
@@ -101,16 +95,6 @@ export class UserEntity {
     this.props.password = hashedPassword;
     this.touch();
     this.validate();
-  }
-
-  activate(): void {
-    this.props.isActive = true;
-    this.touch();
-  }
-
-  deactivate(): void {
-    this.props.isActive = false;
-    this.touch();
   }
 
   private touch(): void {

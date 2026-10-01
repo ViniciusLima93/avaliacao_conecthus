@@ -43,12 +43,13 @@ const Wrapper = styled.label`
   align-items: center;
   gap: 8px;
   width: 100%;
-  min-height: 44px;
-  padding: 0 12px;
+  min-height: 48px;
+  padding: 0 14px;
+  /* Spec: branco, borda #86868645, raio de 7px e sombra. */
   background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.radii.md};
-  box-shadow: ${({ theme }) => theme.shadows.sm};
+  border: 1px solid ${({ theme }) => theme.colors.inputBorder};
+  border-radius: ${({ theme }) => theme.radii.search};
+  box-shadow: ${({ theme }) => theme.shadows.search};
   color: ${({ theme }) => theme.colors.heading};
   cursor: text;
 
@@ -67,7 +68,8 @@ const Input = styled.input`
   border: 0;
   outline: 0;
   background: transparent;
-  font-size: 14px;
+  font-size: 16px;
+  font-weight: 500;
 
   /* O foco é indicado pela borda do wrapper (:focus-within). */
   &:focus-visible {
@@ -75,8 +77,8 @@ const Input = styled.input`
   }
 
   &::placeholder {
-    color: ${({ theme }) => theme.colors.heading};
-    opacity: 0.8;
+    color: ${({ theme }) => theme.colors.textSecondary};
+    opacity: 0.86;
   }
 
   &::-webkit-search-cancel-button {

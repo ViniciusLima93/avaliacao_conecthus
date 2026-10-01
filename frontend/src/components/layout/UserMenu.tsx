@@ -109,12 +109,13 @@ const Avatar = styled.span<{ $size: number }>`
   flex-shrink: 0;
   width: ${({ $size }) => $size}px;
   height: ${({ $size }) => $size}px;
-  border: 2px solid ${({ theme }) => theme.colors.primary};
+  border: 2px solid ${({ theme }) => theme.colors.accent};
   border-radius: 50%;
-  background: ${({ theme }) => theme.colors.heading};
+  background: ${({ theme }) => theme.colors.avatar};
   color: ${({ theme }) => theme.colors.white};
-  font-size: ${({ $size }) => Math.round($size * 0.38)}px;
-  font-weight: 600;
+  font-family: ${({ theme }) => theme.fonts.accent};
+  font-size: ${({ $size }) => Math.round($size * 0.4)}px;
+  font-weight: 500;
   user-select: none;
 `;
 
@@ -187,13 +188,18 @@ const MenuItem = styled.button`
   min-height: 44px;
   padding: 0 8px;
   border: 0;
-  border-radius: ${({ theme }) => theme.radii.sm};
+  border-radius: ${({ theme }) => theme.radii.md};
   background: transparent;
   font-size: 16px;
   color: ${({ theme }) => theme.colors.heading};
   text-align: left;
+  transition: background 0.15s ease;
 
-  &:hover {
-    background: ${({ theme }) => theme.colors.background};
+  /* Protótipo: hover/foco com fundo verde-azulado claro. */
+  &:hover,
+  &:focus-visible,
+  &:focus {
+    background: ${({ theme }) => theme.colors.menuItemActive};
+    outline: none;
   }
 `;

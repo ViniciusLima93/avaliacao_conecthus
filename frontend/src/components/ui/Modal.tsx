@@ -166,7 +166,8 @@ const Header = styled.header<VariantProps>`
 `;
 
 const Title = styled.h2<VariantProps>`
-  font-size: ${({ $variant }) => ($variant === 'alert' ? '22px' : '18px')};
+  /* Spec (alerta): Manrope Bold 26px (H4). */
+  font-size: ${({ $variant }) => ($variant === 'alert' ? '26px' : '18px')};
   font-weight: 700;
   color: ${({ theme }) => theme.colors.heading};
 `;
@@ -197,7 +198,10 @@ const Body = styled.div<VariantProps>`
     css`
       && {
         padding: 12px 0 0;
-        font-size: 15px;
+        /* Spec: Manrope Medium 18px/24px (B1). */
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 24px;
         color: ${theme.colors.heading};
       }
     `}

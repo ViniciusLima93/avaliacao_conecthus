@@ -31,7 +31,6 @@ describe('CreateUserUseCase', () => {
 
     expect(repository.items).toHaveLength(1);
     expect(user.password).toBe('hashed:Abc123');
-    expect(user.isActive).toBe(true);
   });
 
   it('impede e-mail duplicado (ignorando maiúsculas)', async () => {

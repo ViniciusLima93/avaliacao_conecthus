@@ -1,9 +1,7 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsBoolean,
   IsEmail,
   IsNotEmpty,
-  IsOptional,
   IsString,
   Length,
   Matches,
@@ -73,13 +71,4 @@ export class CreateUserDto {
     message: UserMessages.PASSWORD_LENGTH,
   })
   password: string;
-
-  @ApiPropertyOptional({
-    description: 'Indica se o usuário está ativo',
-    default: true,
-    example: true,
-  })
-  @IsOptional()
-  @IsBoolean({ message: UserMessages.IS_ACTIVE_BOOLEAN })
-  isActive?: boolean;
 }

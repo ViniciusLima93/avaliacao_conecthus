@@ -15,7 +15,6 @@ describe('UserEntity', () => {
 
     expect(user.id).toBeDefined();
     expect(user.email).toBe('maria.silva@email.com');
-    expect(user.isActive).toBe(true);
     expect(user.createdAt).toBeInstanceOf(Date);
   });
 
@@ -128,14 +127,5 @@ describe('UserEntity', () => {
     expect(user.isDeleted).toBe(true);
     expect(deletedAt).toBeInstanceOf(Date);
     expect(user.deletedAt).toBe(deletedAt);
-  });
-
-  it('ativa e desativa o usuário', () => {
-    const user = UserFactory.create(validInput);
-
-    user.deactivate();
-    expect(user.isActive).toBe(false);
-    user.activate();
-    expect(user.isActive).toBe(true);
   });
 });
