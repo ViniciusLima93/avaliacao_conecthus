@@ -100,11 +100,30 @@ describe('UserEntity', () => {
     const user = UserFactory.create(validInput);
     const before = user.updatedAt;
 
-    user.update({ name: 'Maria Souza', email: 'NOVO@email.com' });
+    const changed = user.update({
+      name: 'Maria Souza',
+      email: 'NOVO@email.com',
+    });
 
+    expect(changed).toBe(true);
     expect(user.name).toBe('Maria Souza');
     expect(user.email).toBe('novo@email.com');
     expect(user.updatedAt.getTime()).toBeGreaterThanOrEqual(before.getTime());
+  });
+
+  it('não marca edição quando os valores são os mesmos', () => {
+    const user = UserFactory.create(validInput);
+    const before = user.updatedAt;
+
+    // Mesmo nome com espaços e mesmo e-mail com outra caixa: nada muda de fato.
+    const changed = user.update({
+      name: `  ${user.name}  `,
+      registration: user.registration,
+      email: user.email.toUpperCase(),
+    });
+
+    expect(changed).toBe(false);
+    expect(user.updatedAt).toBe(before);
   });
 
   it('rejeita atualização que viola as invariantes', () => {

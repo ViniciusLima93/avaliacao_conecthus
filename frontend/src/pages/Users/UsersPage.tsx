@@ -40,6 +40,17 @@ export function UsersPage() {
   const [searchInput, setSearchInput] = useState(search);
   const debouncedSearch = useDebounce(searchInput.trim());
 
+  // Se a URL mudar por fora (menu, voltar, link), o campo acompanha. Quando a
+  // mudança veio da própria digitação, `search` já é igual ao termo digitado
+  // e o campo não é tocado (não atrapalha quem ainda está digitando).
+  const [lastSearch, setLastSearch] = useState(search);
+  if (search !== lastSearch) {
+    setLastSearch(search);
+    if (search !== debouncedSearch) {
+      setSearchInput(search);
+    }
+  }
+
   const [viewing, setViewing] = useState<User | null>(null);
   const [deleting, setDeleting] = useState<User | null>(null);
 

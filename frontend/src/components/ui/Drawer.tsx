@@ -40,7 +40,11 @@ export function Drawer({
       >
         <Header>
           <Title id={titleId}>{title}</Title>
-          <CloseButton type="button" aria-label="Fechar" onClick={onClose}>
+          <CloseButton
+            type="button"
+            aria-label="Fechar painel"
+            onClick={onClose}
+          >
             <X size={24} />
           </CloseButton>
         </Header>

@@ -46,7 +46,7 @@ export class UpdateUserUseCase {
       }
     }
 
-    user.update({
+    let changed = user.update({
       name: input.name,
       registration,
       email,
@@ -54,9 +54,13 @@ export class UpdateUserUseCase {
 
     if (input.password !== undefined) {
       user.changePassword(await this.hashService.hash(input.password));
+      changed = true;
     }
 
-    await this.userRepository.update(user);
+    // Sem alteração real, não grava nada (preserva o updatedAt).
+    if (changed) {
+      await this.userRepository.update(user);
+    }
     return user;
   }
 }

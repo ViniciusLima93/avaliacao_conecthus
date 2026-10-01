@@ -133,6 +133,55 @@ describe('UsersPage', () => {
     ).toBeInTheDocument();
   });
 
+  it('o campo de pesquisa começa com o termo da URL', async () => {
+    renderUsersPage('/usuarios?q=ramon');
+
+    expect(await screen.findByRole('searchbox')).toHaveValue('ramon');
+    expect(api.list).toHaveBeenCalledWith({
+      page: 1,
+      limit: 15,
+      search: 'ramon',
+    });
+  });
+
+  it('limpa o campo quando a URL perde a pesquisa (ex.: clique no menu)', async () => {
+    const { router } = renderUsersPage('/usuarios?q=ramon');
+    const searchbox = await screen.findByRole('searchbox');
+    expect(searchbox).toHaveValue('ramon');
+
+    await router.navigate('/usuarios');
+
+    await waitFor(() => expect(searchbox).toHaveValue(''));
+    await waitFor(() =>
+      expect(api.list).toHaveBeenLastCalledWith({
+        page: 1,
+        limit: 15,
+        search: undefined,
+      }),
+    );
+    // A pesquisa antiga não volta depois do debounce.
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    expect(router.state.location.search).toBe('');
+    expect(searchbox).toHaveValue('');
+  });
+
+  it('continua digitando sem perder caracteres enquanto a URL é atualizada', async () => {
+    const { user } = renderUsersPage();
+    const searchbox = await screen.findByRole('searchbox');
+
+    await user.type(searchbox, 'mar');
+    await waitFor(() =>
+      expect(api.list).toHaveBeenLastCalledWith({
+        page: 1,
+        limit: 15,
+        search: 'mar',
+      }),
+    );
+    await user.type(searchbox, 'ia');
+
+    expect(searchbox).toHaveValue('maria');
+  });
+
   it('navega entre as páginas', async () => {
     api.list.mockResolvedValue(pageOf([makeUser()], { total: 30 }));
     const { user, router } = renderUsersPage();
@@ -172,11 +221,11 @@ describe('UsersPage', () => {
     expect(within(drawer).getByText('809987')).toBeInTheDocument();
     expect(within(drawer).getByText('Nenhuma')).toBeInTheDocument();
 
-    // Há dois "Fechar": o "X" do topo e o botão do rodapé; clica no do rodapé.
-    const [, footerClose] = within(drawer).getAllByRole('button', {
-      name: 'Fechar',
-    });
-    await user.click(footerClose);
+    // Nomes únicos: o "X" do topo é "Fechar painel"; o do rodapé, "Fechar".
+    expect(
+      within(drawer).getByRole('button', { name: 'Fechar painel' }),
+    ).toBeInTheDocument();
+    await user.click(within(drawer).getByRole('button', { name: 'Fechar' }));
     await waitFor(() =>
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument(),
     );

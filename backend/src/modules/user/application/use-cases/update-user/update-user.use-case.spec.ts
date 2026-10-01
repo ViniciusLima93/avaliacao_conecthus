@@ -83,6 +83,37 @@ describe('UpdateUserUseCase', () => {
     ).rejects.toBeInstanceOf(ConflictException);
   });
 
+  it.each([
+    ['vazia', {}],
+    [
+      'com os mesmos valores',
+      { name: 'Usuário Teste', registration: '1001', email: 'A@email.com' },
+    ],
+  ])(
+    'atualização %s não grava nada e preserva o updatedAt',
+    async (_, input) => {
+      const user = makeUser('1001', 'a@email.com');
+      await repository.create(user);
+      const updatedAt = user.updatedAt;
+      const save = jest.spyOn(repository, 'update');
+
+      const result = await useCase.execute(user.id, input);
+
+      expect(result.updatedAt).toBe(updatedAt);
+      expect(save).not.toHaveBeenCalled();
+    },
+  );
+
+  it('troca de senha conta como alteração mesmo sem outros campos', async () => {
+    const user = makeUser('1001', 'a@email.com');
+    await repository.create(user);
+    const save = jest.spyOn(repository, 'update');
+
+    await useCase.execute(user.id, { password: 'Xyz789' });
+
+    expect(save).toHaveBeenCalledTimes(1);
+  });
+
   it('lança NotFound para usuário inexistente', async () => {
     await expect(
       useCase.execute(randomUUID(), { name: 'Qualquer' }),

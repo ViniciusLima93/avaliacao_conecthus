@@ -105,6 +105,30 @@ describe('Users (e2e)', () => {
     }
   });
 
+  it('PATCH sem alteração real preserva o updatedAt', async () => {
+    const created = (await createUser().expect(201)).body as UserBody & {
+      updatedAt: string;
+    };
+
+    for (const body of [{}, { name: payload.name, email: 'MARIA@email.com' }]) {
+      const res = await request(app.getHttpServer())
+        .patch(`/users/${created.id}`)
+        .send(body)
+        .expect(200);
+      expect((res.body as { updatedAt: string }).updatedAt).toBe(
+        created.updatedAt,
+      );
+    }
+
+    const changed = await request(app.getHttpServer())
+      .patch(`/users/${created.id}`)
+      .send({ name: 'Maria Souza' })
+      .expect(200);
+    expect((changed.body as { updatedAt: string }).updatedAt).not.toBe(
+      created.updatedAt,
+    );
+  });
+
   it('armazena a senha com hash', async () => {
     const res = await createUser().expect(201);
     const stored = await prisma.client.user.findUniqueOrThrow({

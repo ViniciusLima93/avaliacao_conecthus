@@ -82,13 +82,40 @@ export class UserEntity {
     this.props.deletedAt = new Date();
   }
 
-  update(data: UpdateUserProps): void {
-    if (data.name !== undefined) this.props.name = data.name.trim();
-    if (data.registration !== undefined)
-      this.props.registration = data.registration.trim();
-    if (data.email !== undefined) this.props.email = Email.create(data.email);
+  /**
+   * Aplica só o que realmente mudou. Retorna `false` quando nada mudou: nesse
+   * caso o `updatedAt` é preservado (não houve edição).
+   */
+  update(data: UpdateUserProps): boolean {
+    let changed = false;
+
+    const name = data.name?.trim();
+    if (name !== undefined && name !== this.props.name) {
+      this.props.name = name;
+      changed = true;
+    }
+
+    const registration = data.registration?.trim();
+    if (
+      registration !== undefined &&
+      registration !== this.props.registration
+    ) {
+      this.props.registration = registration;
+      changed = true;
+    }
+
+    if (data.email !== undefined) {
+      const email = Email.create(data.email);
+      if (!email.equals(this.props.email)) {
+        this.props.email = email;
+        changed = true;
+      }
+    }
+
+    if (!changed) return false;
     this.touch();
     this.validate();
+    return true;
   }
 
   changePassword(hashedPassword: string): void {
